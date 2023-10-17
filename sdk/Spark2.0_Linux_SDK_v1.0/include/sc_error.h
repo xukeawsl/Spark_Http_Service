@@ -1,0 +1,36 @@
+#ifndef SC_ERROR_API_H
+#define SC_ERROR_API_H
+typedef enum {
+    SPARKCHAIN_ERR_SUCCESS        = 0,  // 操作成功
+    SPARKCHAIN_ERR_GENERAL_FAILED = 1,  // 一般错误
+
+    SPARKCHAIN_ERR_SDK_INVALID                = 18300, // sdk不可用
+    SPARKCHAIN_ERR_SDK_NOT_INITED             = 18301, // sdk没有初始化
+    SPARKCHAIN_ERR_SDK_INIT_FAILED            = 18302, // sdk初始化失败
+    SPARKCHAIN_ERR_SDK_ALREADY_INIT           = 18303, // sdk已经初始化
+    SPARKCHAIN_ERR_SDK_CONCURRENT_OVERFLOW    = 18311, // sdk同一能力并发路数超出最大限制
+    SPARKCHAIN_ERR_IS_RUNNING                 = 18312, // 此实例已处在运行态，禁止单实例并发运行
+
+    SPARKCHAIN_ERR_PARAM_NULL_APPID_PTR       = 18503, // sdk初始化参数中appid为空
+    SPARKCHAIN_ERR_PARAM_NULL_APIKEY_PTR      = 18504, // sdk初始化参数中apiKey为空
+    SPARKCHAIN_ERR_PARAM_NULL_APISECRET_PTR   = 18505, // sdk初始化参数中apiSecret为空
+    SPARKCHAIN_ERR_PARAM_REQUIRED_MISSED      = 18509, // 必填参数缺失
+
+    SPARKCHAIN_ERR_CLOUD_GENERAL_FAILED       = 18700, // 通用网络错误
+    SPARKCHAIN_ERR_CLOUD_CONNECT_FAILED       = 18701, // 网路不通
+    SPARKCHAIN_ERR_CLOUD_403                  = 18702, // 网关检查不过
+
+    SPARKCHAIN_ERR_LOCAL_NET_CONNECT_FAILED   = 18801, // 连接建立出错
+    SPARKCHAIN_ERR_LOCAL_NET_RES_WAIT_TIMEOUT = 18802, // 结果等待超时
+    SPARKCHAIN_ERR_LOCAL_NET_CONNECT_ERROR    = 18803, // 连接状态异常
+
+    SPARKCHAIN_ERR_CONCURRENT_OVERFLOW        = 18902, // 并发超过路数限制
+    SPARKCHAIN_ERR_AGENT_NEXT_STEPS_EMPTY     = 18903, // 大模型规划步骤为空
+    SPARKCHAIN_ERR_AGENT_PLUGIN_NOT_FOUND     = 18904, // 插件为找到
+    SPARKCHAIN_ERR_AGENT_ITERATION_EXCEEDS    = 18906, // 与大模型交互次数超限制
+    SPARKCHAIN_ERR_AGENT_TIMETAKEN_EXCEEDS    = 18907, // 运行超限制时长
+    SPARKCHAIN_ERR_AGENT_ANSWER_FORMAT_ERR    = 18908, // 大模型返回结果格式异常
+    SPARKCHAIN_ERR_SPARK_TEXT_INVALID         = 18952  // 输入数据为空或异常
+} SPARKCHAIN_ERR;
+
+#endif
