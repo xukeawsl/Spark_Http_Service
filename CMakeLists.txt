@@ -1,6 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(Spark_Http_Service)
+
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -ggdb -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wno-unused")
 
 file(GLOB_RECURSE srcs ${PROJECT_SOURCE_DIR}/src/*.cpp)
 

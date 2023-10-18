@@ -25,17 +25,30 @@
 */
 
 struct request_data {
-    char *appID = NULL;
-    char *apiKey = NULL;
-    char *apiSecret = NULL;
-    char *content = NULL;
+public:
+    char *appID;
+    char *apiKey;
+    char *apiSecret;
+    char *content;
+
+    cJSON *json_input;
+    cJSON *file_input;
+
+    request_data() : appID(nullptr), apiKey(nullptr), apiSecret(nullptr),
+                     content(nullptr), json_input(nullptr), file_input(nullptr)
+                     {}
+
+    ~request_data() {
+        if (json_input) cJSON_Delete(json_input);
+        if (file_input) cJSON_Delete(file_input);
+    }
 };
 
 
 static void set_Response(ngx_json_response_t *resp, int code, const char *message, const char *content)
 {
     cJSON *output = cJSON_CreateObject();
-    if (output == NULL) {
+    if (output == nullptr) {
         return;
     }
 
@@ -49,29 +62,29 @@ static void set_Response(ngx_json_response_t *resp, int code, const char *messag
 }
 
 
-static bool parse_Request(const ngx_json_request_t *rqst, struct request_data *data)
+static bool parse_Request(const ngx_json_request_t *rqst, request_data *data)
 {
-    cJSON *input = cJSON_Parse(rqst->data);
-    if (input == NULL) {
+    data->json_input = cJSON_Parse(rqst->data);
+    if (data->json_input == nullptr) {
         return false;
     }
 
-    cJSON *appID = cJSON_GetObjectItem(input, "appID");
+    cJSON *appID = cJSON_GetObjectItem(data->json_input, "appID");
     if (cJSON_IsString(appID)) {
         data->appID = cJSON_GetStringValue(appID);
     }
 
-    cJSON *apiKey = cJSON_GetObjectItem(input, "apiKey");
+    cJSON *apiKey = cJSON_GetObjectItem(data->json_input, "apiKey");
     if (cJSON_IsString(apiKey)) {
         data->apiKey = cJSON_GetStringValue(apiKey);
     }
 
-    cJSON *apiSecret = cJSON_GetObjectItem(input, "apiSecret");
+    cJSON *apiSecret = cJSON_GetObjectItem(data->json_input, "apiSecret");
     if (cJSON_IsString(apiSecret)) {
         data->apiSecret = cJSON_GetStringValue(apiSecret);
     }
 
-    cJSON *content = cJSON_GetObjectItem(input, "content");
+    cJSON *content = cJSON_GetObjectItem(data->json_input, "content");
     if (cJSON_IsString(content)) {
         data->content = cJSON_GetStringValue(content);
     }
@@ -108,24 +121,24 @@ static bool parse_Request(const ngx_json_request_t *rqst, struct request_data *d
 
         fclose(fp);
 
-        cJSON *config_file = cJSON_Parse(file_buf);
-        if (config_file == nullptr) {
+        data->file_input = cJSON_Parse(file_buf);
+        if (data->file_input == nullptr) {
             free(file_buf);
             
             return false;
         }
 
-        appID = cJSON_GetObjectItem(config_file, "appID");
+        appID = cJSON_GetObjectItem(data->file_input, "appID");
         if (cJSON_IsString(appID)) {
             data->appID = cJSON_GetStringValue(appID);
         }
 
-        apiKey = cJSON_GetObjectItem(config_file, "apiKey");
+        apiKey = cJSON_GetObjectItem(data->file_input, "apiKey");
         if (cJSON_IsString(apiKey)) {
             data->apiKey = cJSON_GetStringValue(apiKey);
         }
 
-        apiSecret = cJSON_GetObjectItem(config_file, "apiSecret");
+        apiSecret = cJSON_GetObjectItem(data->file_input, "apiSecret");
         if (cJSON_IsString(apiSecret)) {
             data->apiSecret = cJSON_GetStringValue(apiSecret);
         }
@@ -133,7 +146,6 @@ static bool parse_Request(const ngx_json_request_t *rqst, struct request_data *d
         free(file_buf);
     }
 
-    
     return data->appID && data->apiKey && data->apiSecret;
 }
 
