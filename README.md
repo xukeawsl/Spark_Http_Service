@@ -5,7 +5,17 @@
 在 nginx 上部署 `科大讯飞星火大模型V2.0` 服务，支持简单的 HTTP 请求
 
 ## 接口请求
-1. 请求参数
+1. HTTP 头部
+调用服务需要添加自定义 HTTP 头部 `Service-Name: srv_spark`
+```bash
+# 以 curl 调用为例
+curl -X POST http://localhost/spark_service \
+-H 'Service-Name: srv_spark' \
+-H 'Content-Type: application/json' \
+-d '{"content": "你好呀"}'
+```
+
+2. 请求参数
 ```json
 {
     "appID": "从开放平台控制台获取的appID(非必填)",
@@ -15,7 +25,7 @@
 }
 ```
 
-2. 响应参数
+3. 响应参数
 * 错误码可能的内容参考[文档](https://www.xfyun.cn/doc/spark/LinuxSDK.html#_8-%E9%94%99%E8%AF%AF%E7%A0%81)
 ```json
 {
